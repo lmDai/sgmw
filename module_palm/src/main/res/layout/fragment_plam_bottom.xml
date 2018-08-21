@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_trip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/color_white"
+        android:gravity="center"
+        android:minHeight="@dimen/dp_36"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用车概况" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="行程信息,充电信息" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_right" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/color_white"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_10">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:minHeight="@dimen/dp_36">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="车辆信息" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="更多"
+                android:visibility="gone" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_right"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.uiho.sgmw.common.widget.lableview.LabelImageView
+                android:id="@+id/label_img"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_80"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg_gradient_black"
+                app:label_backgroundColor="@color/color_orange"
+                app:label_height="@dimen/dp_30"
+                app:label_orientation="RIGHT_TOP"
+                app:label_strokeWidth="@dimen/dp_0"
+                app:label_text="@string/app_name"
+                app:label_textColor="@color/color_white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/dp_10">
+
+                <ImageView
+                    android:id="@+id/imghead"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/dp_10">
+
+                    <TextView
+                        android:id="@+id/txtxm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="@dimen/dp_20"
+                        android:text="车主姓名："
+                        android:textColor="@color/color_white" />
+
+                    <TextView
+                        android:id="@+id/txtphone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="@dimen/dp_20"
+                        android:text="车主电话："
+                        android:textColor="@color/color_white" />
+
+                    <TextView
+                        android:id="@+id/txttime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:minHeight="@dimen/dp_20"
+                        android:text="提车日期："
+                        android:textColor="@color/color_white" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gradient_black"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_64"
+            android:padding="@dimen/dp_8">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="03.21  星期三"
+                    android:textColor="@color/color_white" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_weather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_date"
+                        android:padding="@dimen/dp_10"
+                        android:src="@drawable/ic_sun" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/dp_4"
+                            android:drawableRight="@drawable/ic_down_arrow"
+                            android:text="重庆"
+                            android:textColor="@color/color_white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="20℃"
+                            android:textColor="@color/color_white" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center|top"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/sp_18"
+                    tools:text="我的小E" />
+
+                <TextView
+                    android:id="@+id/txt_vin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:drawableRight="@drawable/ic_hide"
+                    android:textColor="@color/color_85_bule"
+                    android:textSize="@dimen/sp_12"
+                    tools:text="0000000000GB2312" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/img_head"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_40"
+                    android:background="@drawable/shape_img_bg"
+                    android:src="@drawable/che" />
+
+                <TextView
+                    android:id="@+id/txt_nick_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_2"
+                    android:textColor="@color/color_white"
+                    tools:text="@string/app_name" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_160">
+
+            <Button
+                android:id="@+id/btn_park"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="bottom|start"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:background="@drawable/right_corner_green"
+                android:text="智能停车"
+                android:textColor="@color/color_white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|bottom"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="续航里程："
+                            android:textColor="@color/color_light_bule" />
+
+                        <TextView
+                            android:id="@+id/txt_enduranceMileage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_white"
+                            tools:text="155km" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="当前电量："
+                            android:textColor="@color/color_light_bule" />
+
+                        <TextView
+                            android:id="@+id/txt_elec"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_white"
+                            tools:text="15km" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_car" />
+            </LinearLayout>
+
+            <com.uiho.sgmw.common.widget.NewCreditSesameView
+                android:id="@+id/sesame_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/txt_total_mileage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:background="@drawable/shape_point_orange"
+                android:gravity="center"
+                android:minWidth="@dimen/dp_50"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/sp_8"
+                tools:text="总里程\n1\nkm" />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginTop="@dimen/dp_m_20"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!--android:drawableLeft="@drawable/ic_gps"-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawablePadding="@dimen/dp_4"
+                    android:gravity="center"
+                    android:text="车辆状态"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/txt_driving_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:textColor="@color/color_light_yellow" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_light"
+                    android:drawablePadding="@dimen/dp_4"
+                    android:gravity="center"
+                    android:text="车灯"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/txt_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:textColor="@color/color_light_yellow" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@color/color_line" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableLeft="@drawable/ic_door"
+                    android:drawablePadding="@dimen/dp_4"
+                    android:gravity="center"
+                    android:text="车门"
+                    android:textColor="@color/color_white" />
+
+                <TextView
+                    android:id="@+id/txt_door"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:textColor="@color/color_light_yellow" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:padding="@dimen/dp_4"
+            android:textColor="@color/color_85_white"
+            android:textSize="@dimen/sp_10"
+            tools:text="2018:120011" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_195">
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/txt_car_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:padding="@dimen/dp_4"
+            android:textColor="@color/color_85_white"
+            android:textSize="@dimen/sp_10"
+            tools:text="2018:120011" />
+
+        <ImageButton
+            android:id="@+id/ib_postion"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/dp_15"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_full_screen" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:minHeight="@dimen/dp_45">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/color_white"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:text="防盗警报" />
+
+            <Switch
+                android:id="@+id/switch_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_elec_fence"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_weight="1"
+            android:background="@color/color_white"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:text="电子围栏" />
+
+            <TextView
+                android:id="@+id/txt_fence"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:drawableRight="@drawable/ic_right"
+                android:gravity="center"
+                android:text="已开启" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

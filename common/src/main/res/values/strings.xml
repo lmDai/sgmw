@@ -1,0 +1,23 @@
+<resources>
+    <string name="NO_NET_CONNECTED">当前网络不可用，请检查网络情况</string>
+    <string name="No_Login_Exception">登录失效，请重新登录</string>
+    <string name="app_name">菱云智航</string>
+    <string name="error_phone">请输入正确的手机号码</string>
+    <string name="empty_phone">请输入手机号码</string>
+    <string name="empty_password">请输入密码</string>
+    <string name="text_login">登录</string>
+    <string name="login_failed">登录失败</string>
+
+    <string name="zoom_in">+</string>
+    <string name="zoom_out">—</string>
+    <string name="cancel">取消</string>
+    <string name="submit">允许</string>
+    <string name="palm_baojun">掌上宝骏</string>
+    <string name="text_travel_statistics">用车概况</string>
+    <string name="travel_info">行驶信息</string>
+    <string name="charging_info">充电信息</string>
+    <string name="day">日</string>
+    <string name="week">周</string>
+    <string name="month">月</string>
+    <string name="year">年</string>
+</resources>

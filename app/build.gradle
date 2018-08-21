@@ -1,0 +1,68 @@
+apply plugin: 'com.android.application'
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("GMT+8"))
+}
+
+def ext = rootProject.ext
+def version = ext.versions
+def appPackage = ext.appID
+def dependencie = ext.dependencies
+android {
+    compileSdkVersion version.compileSdkVersion
+    defaultConfig {
+        applicationId appPackage.app
+        minSdkVersion version.minSdkVersion
+        targetSdkVersion version.targetSdkVersion
+        versionCode version.versionCode
+        versionName version.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86_64"
+        }
+    }
+    packagingOptions {
+        exclude 'lib/mips64/*.so'
+        exclude 'lib/mips/*.so'
+    }
+    signingConfigs {
+        config {
+            storeFile file("uihocqlt.jks")
+            storePassword "uiho1234"
+            keyAlias "key0"
+            keyPassword "uiho1234"
+            v2SigningEnabled false
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.config
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    outputFileName = "sgmw_${releaseTime()}_v${variant.versionName}.apk"
+                }
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':common')
+    if (!isModule.toBoolean()) {
+        api project(':module_login')
+        api project(':module_palm')
+    }
+}
