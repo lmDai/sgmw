@@ -1,10 +1,8 @@
 package com.uiho.sgmw.common.https.observers_extension;
 
-import android.app.Dialog;
 import android.support.annotation.NonNull;
 
 import com.uiho.sgmw.common.base.BasePresenter;
-import com.uiho.sgmw.common.widget.dialog.IProgressDialog;
 
 import io.reactivex.disposables.Disposable;
 
@@ -17,41 +15,23 @@ import io.reactivex.disposables.Disposable;
  */
 public abstract class ProgressObserver<T> extends BaseObserver<T> {
     private BasePresenter mBasePresenter;
-    private IProgressDialog progressDialog;
-    private Dialog mDialog;
     private boolean isShowProgress = false;
 
     protected ProgressObserver(BasePresenter basePresenter) {
         this.mBasePresenter = basePresenter;
-        init();
     }
 
-    protected ProgressObserver(BasePresenter mBasePresenter, IProgressDialog progressDialog, boolean isShowProgress) {
-        this.mBasePresenter = mBasePresenter;
-        this.progressDialog = progressDialog;
+    protected ProgressObserver(BasePresenter basePresenter, boolean isShowProgress) {
+        this.mBasePresenter = basePresenter;
         this.isShowProgress = isShowProgress;
-        init();
-    }
-
-    private void init() {
-        if (progressDialog == null) return;
-        mDialog = progressDialog.getDialog();
-        if (mDialog == null) return;
-        mDialog.setCancelable(false);
     }
 
     /**
      * 展示进度框
      */
     private void showProgress() {
-        if (!isShowProgress) {
+        if (isShowProgress) {
             mBasePresenter.getView().showProgress();
-            return;
-        }
-        if (mDialog != null) {
-            if (!mDialog.isShowing()) {
-                mDialog.show();
-            }
         }
     }
 
@@ -59,14 +39,8 @@ public abstract class ProgressObserver<T> extends BaseObserver<T> {
      * 取消进度框
      */
     private void dismissProgress() {
-        if (!isShowProgress) {
+        if (isShowProgress) {
             mBasePresenter.getView().hideProgress();
-            return;
-        }
-        if (mDialog != null) {
-            if (mDialog.isShowing()) {
-                mDialog.dismiss();
-            }
         }
     }
 

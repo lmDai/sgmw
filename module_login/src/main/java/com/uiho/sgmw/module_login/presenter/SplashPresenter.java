@@ -18,7 +18,7 @@ public class SplashPresenter extends SplashContract.Presenter {
         MainModule.createRetrofit().verifyLogin(token)
                 .compose(RxSchedulers.observableIO2Main(getView()))
                 .compose(RxSchedulers.hanResult())
-                .subscribe(new ProgressObserver<Boolean>(this) {
+                .subscribe(new ProgressObserver<Boolean>(this, true) {
                     @Override
                     public void onSuccess(Boolean result) {
                         getView().verifyLogin(result);//结果返回

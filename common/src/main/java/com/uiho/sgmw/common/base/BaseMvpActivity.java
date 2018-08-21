@@ -96,6 +96,7 @@ public abstract class BaseMvpActivity<V extends IBaseView, P extends BasePresent
 
     @Override
     public void showProgress() {
+        Log.e("single", "showProgress");
         if (mLoadingDialog != null) {
             mLoadingDialog.show();
         }

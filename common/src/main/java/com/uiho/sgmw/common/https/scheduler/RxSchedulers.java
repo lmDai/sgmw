@@ -1,7 +1,6 @@
 package com.uiho.sgmw.common.https.scheduler;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.uiho.sgmw.common.base.BaseResponse;
 import com.uiho.sgmw.common.base.IBaseView;
@@ -29,32 +28,27 @@ public class RxSchedulers {
     }
 
     public static <T> ObservableTransformer<BaseResponse<T>, T> hanResult() {
-        return upstream -> upstream.flatMap(new Function<BaseResponse<T>, ObservableSource<T>>() {
-            @Override
-            public ObservableSource<T> apply(BaseResponse<T> tBaseResponse) throws Exception {
-                Log.i("single",tBaseResponse.toString());
-                if (tBaseResponse.isSuccess()) {
-                    return createData(tBaseResponse.getResult());
-                } else if (!TextUtils.isEmpty(tBaseResponse.getMessage())) {
-                    return Observable.error(new ApiException(tBaseResponse.getMessage(), tBaseResponse.getCode()));
-                } else {
-                    return Observable.error(new ApiException("*" + "服务器返回error", 10000));
-                }
+        return upstream -> upstream.flatMap((Function<BaseResponse<T>, ObservableSource<T>>) tBaseResponse -> {
+            if (tBaseResponse.isSuccess()) {
+                return createData(tBaseResponse.getResult());
+            } else if (!TextUtils.isEmpty(tBaseResponse.getMessage())) {
+                return Observable.error(new ApiException(tBaseResponse.getMessage(), tBaseResponse.getCode()));
+            } else {
+                return Observable.error(new ApiException("*" + "服务器返回error", 10000));
             }
         });
     }
+
     public static <T> ObservableTransformer<T, T> handVersionResult() {
-        return upstream -> upstream.flatMap(new Function<T, ObservableSource<T>>() {
-            @Override
-            public ObservableSource<T> apply(T tBaseResponse) throws Exception {
-                if (tBaseResponse != null) {
-                    return createData(tBaseResponse);
-                } else {
-                    return Observable.error(new ApiException("*" + "服务器返回error", 10000));
-                }
+        return upstream -> upstream.flatMap((Function<T, ObservableSource<T>>) tBaseResponse -> {
+            if (tBaseResponse != null) {
+                return createData(tBaseResponse);
+            } else {
+                return Observable.error(new ApiException("*" + "服务器返回error", 10000));
             }
         });
     }
+
     /**
      * 生成Observable
      *

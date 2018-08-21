@@ -9,15 +9,16 @@ import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.uiho.sgmw.common.Constants;
 import com.uiho.sgmw.common.base.BaseMvpActivity;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.model.UserModel;
 import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
 import com.uiho.sgmw.common.utils.AESUtil;
+import com.uiho.sgmw.common.utils.ARouterUtils;
 import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.GsonUtils;
 import com.uiho.sgmw.common.utils.SPUtils;
@@ -54,6 +55,8 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.View, LoginPres
     CheckBox checkbox;
     @BindView(R2.id.btn_login)
     Button btnLogin;
+    @BindView(R2.id.ll_code)
+    LinearLayout ll_code;
 
     @Override
     protected int getLayout() {
@@ -66,6 +69,19 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.View, LoginPres
         String password = (String) SPUtils.getParam(mContext, Constants.PASSWORD, "");
         editCode.setText(password);
         editPhone.setText(phone);
+        //手机号输入
+        editPhone.setBackground(SelectorFactory.newShapeSelector()
+                .setCornerRadius(10)
+                .setDefaultStrokeColor(ContextCompat.getColor(this, R.color.color_line))
+                .setStrokeWidth(2)
+                .create());
+        //密码输入
+        ll_code.setBackground(SelectorFactory.newShapeSelector()
+                .setCornerRadius(10)
+                .setDefaultStrokeColor(ContextCompat.getColor(this, R.color.color_line))
+                .setStrokeWidth(2)
+                .create());
+        //登录按钮
         btnLogin.setBackground(SelectorFactory.newShapeSelector()
                 .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_bule))
                 .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_bule))
@@ -94,7 +110,7 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.View, LoginPres
             SPUtils.setParam(mContext, Constants.IS_LOGIN, true);
             SPUtils.setParam(mContext, Constants.TOKEN, userModel.getToken());
             SPUtils.setParam(mContext, Constants.PASSWORD, editCode.getText().toString());
-            ARouter.getInstance().build(RouterPath.MAIN_ACTIVITY).withTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right).navigation();
+            ARouterUtils.goPage(RouterPath.MAIN_ACTIVITY);
         } else {
             EventUtil.showToast(this, Utils.getString(R.string.login_failed));
         }
@@ -102,14 +118,16 @@ public class LoginActivity extends BaseMvpActivity<LoginContract.View, LoginPres
 
     @OnClick(R2.id.btn_login)
     public void onViewClicked() {
-        if (!ValidateUtils.isChinaPhoneLegal(editPhone.getText().toString())) {
+        String strPhone = editPhone.getText().toString();
+        String strPassword = editCode.getText().toString();
+        if (!ValidateUtils.isChinaPhoneLegal(strPhone)) {
             EventUtil.showToast(mContext, Utils.getString(R.string.error_phone));
             return;
         }
-        if (StringUtils.isEmpty(editCode.getText().toString())) {
+        if (StringUtils.isEmpty(strPassword)) {
             EventUtil.showToast(mContext, Utils.getString(R.string.empty_password));
             return;
         }
-        getMvpPresenter().login(editPhone.getText().toString(), SystemUtils.MdPassword(editCode.getText().toString()));
+        getMvpPresenter().login(strPhone, SystemUtils.MdPassword(strPassword));
     }
 }

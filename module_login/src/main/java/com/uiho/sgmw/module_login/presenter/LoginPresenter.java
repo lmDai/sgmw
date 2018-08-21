@@ -18,7 +18,7 @@ public class LoginPresenter extends LoginContract.Presenter {
         MainModule.createRetrofit().login(mobile, password)
                 .compose(RxSchedulers.observableIO2Main(getView()))
                 .compose(RxSchedulers.hanResult())
-                .subscribe(new ProgressObserver<String>(this) {
+                .subscribe(new ProgressObserver<String>(this, true) {
                     @Override
                     public void onSuccess(String result) {
                         getView().loginResult(result);//返回登录信息

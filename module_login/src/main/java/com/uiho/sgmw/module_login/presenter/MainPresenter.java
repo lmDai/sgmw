@@ -34,7 +34,7 @@ public class MainPresenter extends MainContract.Presenter {
         MainModule.createAppVerSionRetrofit().checkVersion()
                 .compose(RxSchedulers.observableIO2Main(getView()))
                 .compose(RxSchedulers.handVersionResult())
-                .subscribe(new ProgressObserver<UpdateModel>(this) {
+                .subscribe(new ProgressObserver<UpdateModel>(this, false) {
                     @Override
                     public void onSuccess(UpdateModel result) {
                         getView().showUpdateDialog(result);//返回登录信息

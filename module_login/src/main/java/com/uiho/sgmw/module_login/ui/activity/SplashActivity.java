@@ -2,15 +2,13 @@ package com.uiho.sgmw.module_login.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.uiho.sgmw.common.Constants;
 import com.uiho.sgmw.common.base.BaseMvpActivity;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
+import com.uiho.sgmw.common.utils.ARouterUtils;
 import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.SPUtils;
 import com.uiho.sgmw.common.utils.StringUtils;
@@ -19,10 +17,16 @@ import com.uiho.sgmw.module_login.R;
 import com.uiho.sgmw.module_login.contract.SplashContract;
 import com.uiho.sgmw.module_login.presenter.SplashPresenter;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+
 /**
  * 作者：uiho_mac
  * 时间：2018/8/6
- * 描述：
+ * 描述：启动页面
  * 版本：1.0
  * 修订历史：
  */
@@ -30,14 +34,7 @@ import com.uiho.sgmw.module_login.presenter.SplashPresenter;
 @CreatePresenterAnnotation(SplashPresenter.class)
 @Route(path = RouterPath.SPLASH_ACTIVITY)
 public class SplashActivity extends BaseMvpActivity<SplashContract.View, SplashPresenter> implements SplashContract.View {
-    private SplashHandler splashHandler;
-    private Handler handler;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        showSplash();
-    }
+    private Disposable disposable;
 
     @Override
     protected int getLayout() {
@@ -46,52 +43,36 @@ public class SplashActivity extends BaseMvpActivity<SplashContract.View, SplashP
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
-    }
-
-    public void showSplash() {
-        handler = new Handler();
-        splashHandler = new SplashHandler();
+        disposable = Observable.timer(1000, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> {
+                    String token = (String) SPUtils.getParam(mContext, Constants.TOKEN, "");
+                    if (!StringUtils.isEmpty(token)) {
+                        getMvpPresenter().verifyLogin(token);
+                    } else {
+                        ARouterUtils.goPage(RouterPath.LOGIN_ACTIVITY);
+                        finish();
+                    }
+                });
     }
 
     @Override
     public void verifyLogin(boolean isLogin) {
         if (isLogin) {
-            ARouter.getInstance().build(RouterPath.MAIN_ACTIVITY).withTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right).navigation();
+            ARouterUtils.goPage(RouterPath.MAIN_ACTIVITY);
             finish();
         } else {
             EventUtil.showToast(mContext, Utils.getString(R.string.No_Login_Exception));
-            ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).withTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right).navigation();
+            ARouterUtils.goPage(RouterPath.LOGIN_ACTIVITY);
             finish();
-        }
-    }
-
-    private class SplashHandler implements Runnable {
-        @Override
-        public void run() {
-            String token = (String) SPUtils.getParam(mContext, Constants.TOKEN, "");
-            if (!StringUtils.isEmpty(token)) {
-                getMvpPresenter().verifyLogin(token);
-            } else {
-                ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).withTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right).navigation();
-                finish();
-            }
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (handler != null && splashHandler != null) {
-            handler.removeCallbacks(splashHandler);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (handler != null && splashHandler != null) {
-            handler.postDelayed(splashHandler, 1000);
+        if (!disposable.isDisposed()) {
+            disposable.dispose();
         }
     }
 }
