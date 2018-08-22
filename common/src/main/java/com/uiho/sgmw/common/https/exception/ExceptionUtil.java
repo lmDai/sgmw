@@ -8,6 +8,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import retrofit2.HttpException;
+
 /**
  * 作者：uiho_mac
  * 时间：2018/8/6
@@ -37,16 +38,18 @@ public class ExceptionUtil {
         } else if (e instanceof ParseException || e instanceof JSONException
                 || e instanceof com.google.gson.JsonIOException) {
             code = JSONException;
+        } else if (e instanceof ApiException) {
+            code = ((ApiException) e).getCode();
         }
         return code;
     }
 
-    private static int convertCode(HttpException httpException){
+    private static int convertCode(HttpException httpException) {
         int code;
         if (httpException.code() >= 500 && httpException.code() < 600) {
             code = ServiceException;
         } else if (httpException.code() >= 400 && httpException.code() < 500) {
-            if(httpException.code() == 401){
+            if (httpException.code() == 401) {
                 code = NoLoginException;
             } else {
                 code = CustomerException;
@@ -60,9 +63,9 @@ public class ExceptionUtil {
         return code;
     }
 
-    public static String getMsg(int code){
+    public static String getMsg(int code) {
         String errorMsg = "网络不给力";
-        switch (code){
+        switch (code) {
             case UnknownHostException:
                 errorMsg = "网络不给力";
                 break;

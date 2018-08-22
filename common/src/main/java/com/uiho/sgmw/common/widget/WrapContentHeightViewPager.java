@@ -1,11 +1,11 @@
 package com.uiho.sgmw.common.widget;
 
 import android.content.Context;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 /**
  * 作者：uiho_mac
@@ -18,7 +18,6 @@ import android.view.View;
 public class WrapContentHeightViewPager extends ViewPager {
     private int current;
     private int height = 0;
-
     private boolean scrollble = false;
 
     public WrapContentHeightViewPager(Context context) {
@@ -46,9 +45,9 @@ public class WrapContentHeightViewPager extends ViewPager {
     public void resetHeight(int current) {
         this.current = current;
         if (getChildCount() > current) {
-            CollapsingToolbarLayout.LayoutParams layoutParams = (CollapsingToolbarLayout.LayoutParams) getLayoutParams();
+            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) getLayoutParams();
             if (layoutParams == null) {
-                layoutParams = new CollapsingToolbarLayout.LayoutParams(CollapsingToolbarLayout.LayoutParams.MATCH_PARENT, height);
+                layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
             } else {
                 layoutParams.height = height;
             }
@@ -58,10 +57,7 @@ public class WrapContentHeightViewPager extends ViewPager {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        if (!scrollble) {
-            return true;
-        }
-        return super.onTouchEvent(ev);
+        return !scrollble || super.onTouchEvent(ev);
     }
 
     @Override

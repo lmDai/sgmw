@@ -14,7 +14,6 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -36,6 +35,7 @@ import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.SystemUtils;
 import com.uiho.sgmw.common.utils.TabFragmentPagerAdapter;
 import com.uiho.sgmw.common.utils.TabPagerAdapter;
+import com.uiho.sgmw.common.widget.BaseLinkPageChangeListener;
 import com.uiho.sgmw.common.widget.WrapContentHeightViewPager;
 import com.uiho.sgmw.common.widget.dialog.AppUpdateProgressDialog;
 import com.uiho.sgmw.module_login.R;
@@ -67,11 +67,11 @@ import static com.uiho.sgmw.common.Constants.REQUEST_EXTERNAL;
 public class MainActivity extends BaseMvpActivity<MainContract.View, MainContract.Presenter>
         implements MainContract.View {
     @BindView(R2.id.wrap_view_pager)
-    WrapContentHeightViewPager wrapViewPager;
+    WrapContentHeightViewPager topViewpager;
     @BindView(R2.id.slide_layout)
     SlidingTabLayout slideLayout;
     @BindView(R2.id.view_pager)
-    WrapContentHeightViewPager viewPager;
+    WrapContentHeightViewPager bottomViewPager;
     @BindView(R2.id.smart_layout)
     SmartRefreshLayout smartLayout;
     private long firstTime = 0L;
@@ -98,7 +98,6 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-
         palmTopFragment = (Fragment) ARouter.getInstance().build(RouterPath.PALM_TOP_FRAGMENT).navigation();
         palmBottomFragment = (Fragment) ARouter.getInstance().build(RouterPath.PALM_BOTTOM_FRAGMENT).navigation();
         ArrayList<Fragment> topFragments = new ArrayList<>();
@@ -111,6 +110,33 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
         getMvpPresenter().checkedAppVersion();//检查应用版本
     }
 
+    @Override
+    protected void initEvent() {
+        bottomViewPager.addOnPageChangeListener(new BaseLinkPageChangeListener(bottomViewPager, topViewpager) {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                bottomViewPager.resetHeight(position);//设置viewpager高度
+                topViewpager.resetHeight(position);
+            }
+        });
+        topViewpager.addOnPageChangeListener(new BaseLinkPageChangeListener(topViewpager, bottomViewPager) {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                slideLayout.onPageSelected(position);
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                slideLayout.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                bottomViewPager.resetHeight(position);
+                topViewpager.resetHeight(position);
+            }
+        });
+    }
+
     /**
      * 设置viewpager
      * 设置底部碎片
@@ -121,26 +147,9 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     public void setViewPage(String[] titles, final ArrayList<Fragment> xFragment) {
         //添加数据
         final TabFragmentPagerAdapter xFragmentPagerAdapter = new TabFragmentPagerAdapter(getSupportFragmentManager(), titles, xFragment);
-        viewPager.setAdapter(xFragmentPagerAdapter);
-        viewPager.setOffscreenPageLimit(xFragment.size());
-        slideLayout.setViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                wrapContentHeightViewPager.setCurrentItem(position);
-//                viewPager.requestLayout();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        bottomViewPager.setAdapter(xFragmentPagerAdapter);
+        bottomViewPager.setOffscreenPageLimit(xFragment.size());
+        slideLayout.setViewPager(bottomViewPager);
     }
 
 
@@ -152,24 +161,7 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     private void setTopViewpager(final ArrayList<Fragment> topFragments) {
         //添加数据
         final TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), topFragments);
-        wrapViewPager.setAdapter(tabPagerAdapter);
-        wrapViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-//                viewPager.setCurrentItem(position);
-//                wrapContentHeightViewPager.resetHeight(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+        topViewpager.setAdapter(tabPagerAdapter);
     }
 
 
@@ -300,8 +292,8 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     @Override
     protected void onResume() {
         super.onResume();
-        wrapViewPager.requestLayout();
-        viewPager.requestLayout();
+        topViewpager.requestLayout();
+        bottomViewPager.requestLayout();
     }
 
     @Override

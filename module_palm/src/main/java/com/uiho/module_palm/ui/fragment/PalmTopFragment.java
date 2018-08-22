@@ -18,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.fence.GeoFenceClient;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
@@ -52,6 +53,7 @@ import com.uiho.sgmw.common.utils.SPUtils;
 import com.uiho.sgmw.common.utils.UserUtils;
 import com.uiho.sgmw.common.utils.glide.ImageLoadUtils;
 import com.uiho.sgmw.common.widget.NewCreditSesameView;
+import com.uiho.sgmw.common.widget.SelectorFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,6 +66,8 @@ import java.io.InputStream;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * 作者：uiho_mac
@@ -118,6 +122,7 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
     TextView txtFence;
     @BindView(R2.id.layout_elec_fence)
     LinearLayout layoutElecFence;
+    Unbinder unbinder;
     private UiSettings mUiSettings;
     private MarkerOptions markerOption;
     private GeoFenceClient mGeoFenceClient;
@@ -167,6 +172,11 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
                 txtVin.setText(newVin);
             }
         }
+        ibPostion.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(mContext, R.color.color_white_trans))
+                .setPressedBgColor(ContextCompat.getColor(mContext, R.color.color_85_white))
+                .setCornerRadius(10)
+                .create());
     }
 
     @Override
@@ -420,5 +430,20 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
     @Override
     protected int getLayout() {
         return R.layout.fragment_plam_top;
+    }
+
+    @OnClick({R2.id.img_head, R2.id.btn_park, R2.id.ib_postion, R2.id.layout_elec_fence})
+    public void onViewClicked(View view) {
+        int i = view.getId();
+        if (i == R.id.img_head) {
+        } else if (i == R.id.btn_park) {
+        } else if (i == R.id.ib_postion) {
+            ARouter.getInstance().build(RouterPath.PALM_POSITION)
+                    .withString("token", token)
+                    .withString("vin", vin)
+                    .withTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    .navigation();
+        } else if (i == R.id.layout_elec_fence) {
+        }
     }
 }

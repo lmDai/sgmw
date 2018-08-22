@@ -51,6 +51,7 @@ public abstract class ProgressObserver<T> extends BaseObserver<T> {
         }
     }
 
+
     @Override
     public void onComplete() {
         if (mBasePresenter.isViewAttached()) {

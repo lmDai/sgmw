@@ -4,24 +4,17 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.uiho.sgmw.common.R;
-import com.uiho.sgmw.common.base.RouterPath;
-import com.uiho.sgmw.common.eventbus.EventType;
 import com.uiho.sgmw.common.https.exception.ApiException;
 import com.uiho.sgmw.common.https.exception.ExceptionUtil;
 import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.SystemUtils;
 import com.uiho.sgmw.common.utils.Utils;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.lang.ref.WeakReference;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import okhttp3.HttpUrl;
-import retrofit2.HttpException;
 
 /**
  * 作者：uiho_mac
@@ -68,23 +61,12 @@ public abstract class BaseObserver<T> implements Observer<T> {
     public abstract void onSuccess(T result);
 
     public void onFailure(Throwable e, int code, String errorMsg) {
-        Log.d(TAG, "onFailure:  什么错误： " + e + "-------错误信息:" + errorMsg);
-        if (code == 401) {
-            EventBus.getDefault().post(new EventType(EventType.EVENT_NO_LOGIN));
-            if (e instanceof HttpException) {
-                HttpException httpException = (HttpException) e;
-                HttpUrl url = httpException.response().raw().request().url();
-                String s = String.valueOf(url);
-                Log.d(TAG, "onFailure: " + s);
-                if (!s.contains("api/account/index")) {
-                    ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).navigation();
-                }
-            }
-        } else if (code == 402) {//实名认证
-            EventBus.getDefault().post(new EventType(EventType.TO_REA_NNAME_AUTHENTICATION));
-        } else {
-            EventUtil.showToast(Utils.getContext(), errorMsg);
-        }
+        EventUtil.showToast(Utils.getContext(), errorMsg);
+//        if (code == 401) {
+//            if (e instanceof ApiException) {
+//                ViewManager.getInstance().finishAllActivity();
+//                ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).navigation();
+//            }
+//        }
     }
-
 }

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/base_top" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@color/color_white_trans"
+            android:gravity="center"
+            android:minHeight="@dimen/dp_58">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_round_blue"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:text="总里程"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/txt_total_mileage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:text="0km"
+                    android:textColor="@color/color_text_normal"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:background="@color/color_bg" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_round_blue"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:text="续航里程"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/txt_xh_mile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:text="0km"
+                    android:textColor="@color/color_text_normal"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="match_parent"
+                android:background="@color/color_bg" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/shape_round_blue"
+                    android:drawablePadding="@dimen/dp_6"
+                    android:text="剩余电量"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/txt_power"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:text="0"
+                    android:textColor="@color/color_text_normal"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:orientation="vertical"
+            android:padding="@dimen/dp_10">
+
+            <ImageButton
+                android:id="@+id/ib_refresh"
+                android:layout_width="@dimen/dp_42"
+                android:layout_height="@dimen/dp_42"
+                android:layout_margin="@dimen/dp_2"
+                android:background="@drawable/bg_round_selector"
+                android:gravity="center"
+                android:src="@drawable/ic_reset" />
+
+            <ImageButton
+                android:id="@+id/ib_location"
+                android:layout_width="@dimen/dp_42"
+                android:layout_height="@dimen/dp_42"
+                android:layout_margin="@dimen/dp_2"
+                android:background="@drawable/bg_round_selector"
+                android:gravity="center"
+                android:src="@drawable/ic_position_me" />
+
+            <ImageButton
+                android:id="@+id/ib_car"
+                android:layout_width="@dimen/dp_42"
+                android:layout_height="@dimen/dp_42"
+                android:layout_margin="@dimen/dp_2"
+                android:background="@drawable/bg_round_selector"
+                android:gravity="center"
+                android:src="@drawable/ic_position_car" />
+
+            <ImageButton
+                android:id="@+id/ib_fence"
+                android:layout_width="@dimen/dp_42"
+                android:layout_height="@dimen/dp_42"
+                android:layout_margin="@dimen/dp_2"
+                android:background="@drawable/bg_round_selector"
+                android:gravity="center"
+                android:src="@drawable/ic_position_fence" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_car_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:padding="@dimen/dp_6"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_10"
+            tools:text="2018:120011" />
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

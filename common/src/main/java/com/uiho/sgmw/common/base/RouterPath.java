@@ -17,6 +17,7 @@ public class RouterPath {
     /**
      * 掌上宝骏
      */
-    public static final String PALM_TOP_FRAGMENT="/module_palm/palm_top_fragment";//掌上宝骏顶部
-    public static final String PALM_BOTTOM_FRAGMENT="/module_palm/palm_bottom_fragment";//掌上宝骏顶部
+    public static final String PALM_TOP_FRAGMENT = "/module_palm/palm_top_fragment";//掌上宝骏顶部
+    public static final String PALM_BOTTOM_FRAGMENT = "/module_palm/palm_bottom_fragment";//掌上宝骏顶部
+    public static final String PALM_POSITION = "/module_palm/position_activity";//位置信息
 }
