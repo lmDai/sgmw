@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_white"
+    app:elevation="0dp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/bt_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|start"
+            android:gravity="center"
+            android:text="查找地点、停车位"
+            android:textColor="@color/color_text_hint"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <AutoCompleteTextView
+            android:id="@+id/input_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_trans"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableRight="@drawable/ic_search"
+            android:hint="输入地点关键字，查找周边停车场"
+            android:inputType="text|textAutoComplete"
+            android:paddingRight="@dimen/dp_10"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/color_text_normal"
+            android:textSize="@dimen/sp_14" />
+    </android.support.v7.widget.Toolbar>
+</android.support.design.widget.AppBarLayout>

@@ -11,5 +11,35 @@
             android:name=".ui.activity.PositionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--电子围栏-->
+        <activity
+            android:name=".ui.activity.ElectricFenceActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--应用通知-->
+        <activity
+            android:name=".ui.activity.NotificationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--停车场-->
+        <activity
+            android:name=".ui.activity.ParkActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--位置搜索-->
+        <activity
+            android:name=".ui.activity.InputtipsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--行程统计-->
+        <activity
+            android:name=".ui.activity.TravelStatisticsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!--行驶轨迹-->
+        <activity
+            android:name=".ui.activity.TravelPathActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 </manifest>

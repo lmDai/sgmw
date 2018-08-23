@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_search_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_trans"
+    app:elevation="0dp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_margin="@dimen/dp_10"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/bg_round_white">
+
+        <TextView
+            android:id="@+id/bt_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableRight="@drawable/ic_search"
+            android:gravity="center|start"
+            android:paddingRight="@dimen/dp_10"
+            android:text="输入地点关键字，查找周边停车场"
+            android:textColor="@color/color_text_hint"
+            android:textSize="@dimen/sp_14" />
+
+    </android.support.v7.widget.Toolbar>
+</android.support.design.widget.AppBarLayout>

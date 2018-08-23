@@ -2,6 +2,7 @@ package com.uiho.module_palm.ui.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,8 @@ import com.uiho.module_palm.R2;
 import com.uiho.module_palm.base.BasePalmFragment;
 import com.uiho.module_palm.contract.PalmTopContract;
 import com.uiho.module_palm.presenter.PalmTopPresenter;
+import com.uiho.module_palm.ui.activity.ElectricFenceActivity;
+import com.uiho.module_palm.ui.activity.ParkActivity;
 import com.uiho.sgmw.common.Constants;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.eventbus.EventType;
@@ -49,6 +52,7 @@ import com.uiho.sgmw.common.model.UserModel;
 import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
 import com.uiho.sgmw.common.utils.AESUtil;
 import com.uiho.sgmw.common.utils.DateUtils;
+import com.uiho.sgmw.common.utils.IntentUtils;
 import com.uiho.sgmw.common.utils.SPUtils;
 import com.uiho.sgmw.common.utils.UserUtils;
 import com.uiho.sgmw.common.utils.glide.ImageLoadUtils;
@@ -432,11 +436,16 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
         return R.layout.fragment_plam_top;
     }
 
-    @OnClick({R2.id.img_head, R2.id.btn_park, R2.id.ib_postion, R2.id.layout_elec_fence})
+    @OnClick({R2.id.img_head, R2.id.btn_park, R2.id.ib_postion, R2.id.layout_elec_fence, R2.id.txt_vin})
     public void onViewClicked(View view) {
         int i = view.getId();
+        Bundle bundle = new Bundle();
         if (i == R.id.img_head) {
         } else if (i == R.id.btn_park) {
+            if (marker != null) {
+                LatLng latLng = marker.getPosition();//传递车的位置到停车场页面
+                IntentUtils.get().goActivity(mContext, ParkActivity.class, latLng);
+            }
         } else if (i == R.id.ib_postion) {
             ARouter.getInstance().build(RouterPath.PALM_POSITION)
                     .withString("token", token)
@@ -444,6 +453,24 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
                     .withTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                     .navigation();
         } else if (i == R.id.layout_elec_fence) {
+            bundle.putString("vin", vin);
+            bundle.putString("token", token);
+            IntentUtils.get().goActivity(mContext, ElectricFenceActivity.class, bundle);
+        } else if (i == R.id.txt_vin) {
+            hideVin = !hideVin;
+            Drawable drawable;
+            if (hideVin) {
+                String newVin = "****" + vin.substring(vin.length() - 6, vin.length());
+                //显示个人信息
+                txtVin.setText(newVin);
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_hide);
+            } else {
+                //显示个人信息
+                txtVin.setText(vin);
+                drawable = ContextCompat.getDrawable(mContext, R.drawable.ic_visible);
+            }
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight()); //设置边界
+            txtVin.setCompoundDrawables(null, null, drawable, null);//画在右边
         }
     }
 }

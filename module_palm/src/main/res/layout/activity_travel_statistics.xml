@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.TravelStatisticsActivity">
+
+    <include layout="@layout/base_top" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_bg"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:id="@+id/slide_layout"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            app:tl_indicator_color="@color/color_orange"
+            app:tl_indicator_margin_left="@dimen/dp_20"
+            app:tl_indicator_margin_right="@dimen/dp_20"
+            app:tl_tab_space_equal="true"
+            app:tl_textAllCaps="true"
+            app:tl_textSelectColor="@color/color_white"
+            app:tl_textUnselectColor="@color/color_text_hint"
+            app:tl_textsize="@dimen/sp_18" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

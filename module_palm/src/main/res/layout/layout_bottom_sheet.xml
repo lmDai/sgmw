@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/color_white"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/checked_size"
+            android:button="@color/color_trans"
+            android:gravity="center"
+            android:text="距离最近"
+            android:textColor="@drawable/software_textcolor"
+            android:textSize="@dimen/sp_12" />
+
+        <RadioButton
+            android:id="@+id/rb_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/checked_size"
+            android:button="@color/color_trans"
+            android:gravity="center"
+            android:text="剩余车位"
+            android:textColor="@drawable/software_textcolor"
+            android:textSize="@dimen/sp_12" />
+
+        <RadioButton
+            android:id="@+id/rb_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/checked_size"
+            android:button="@color/color_trans"
+            android:gravity="center"
+            android:text="车位最多"
+            android:textColor="@drawable/software_textcolor"
+            android:textSize="@dimen/sp_12" />
+    </RadioGroup>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white" />
+</LinearLayout>

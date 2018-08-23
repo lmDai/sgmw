@@ -2,6 +2,7 @@ package com.uiho.sgmw.common.https.scheduler;
 
 import android.text.TextUtils;
 
+import com.uiho.sgmw.common.base.BaseEnCodeResponse;
 import com.uiho.sgmw.common.base.BaseResponse;
 import com.uiho.sgmw.common.base.IBaseView;
 import com.uiho.sgmw.common.https.exception.ApiException;
@@ -35,6 +36,21 @@ public class RxSchedulers {
                 return Observable.error(new ApiException(tBaseResponse.getMessage(), tBaseResponse.getCode()));
             } else {
                 return Observable.error(new ApiException("*" + "服务器返回error", 10000));
+            }
+        });
+    }
+    /**
+     * 请求结果处理
+     */
+    public static <T> ObservableTransformer<BaseEnCodeResponse<T>, T> handResultList() {
+        return upstream -> upstream.flatMap(new Function<BaseEnCodeResponse<T>, ObservableSource<T>>() {
+            @Override
+            public ObservableSource<T> apply(BaseEnCodeResponse<T> tBaseResponse) throws Exception {
+                if (tBaseResponse.getRspHead().getRspCode().equals("00")) {
+                    return createData(tBaseResponse.getRspBody().getRspContent());
+                } else {
+                    return Observable.error(new ApiException("*" + "服务器返回error", 10000));
+                }
             }
         });
     }

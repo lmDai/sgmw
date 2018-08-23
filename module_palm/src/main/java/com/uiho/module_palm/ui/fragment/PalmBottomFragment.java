@@ -9,11 +9,13 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.uiho.module_palm.R;
 import com.uiho.module_palm.R2;
+import com.uiho.module_palm.ui.activity.TravelStatisticsActivity;
 import com.uiho.sgmw.common.base.BaseFragment;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.eventbus.EventType;
 import com.uiho.sgmw.common.model.CarInfoModel;
 import com.uiho.sgmw.common.model.UserModel;
+import com.uiho.sgmw.common.utils.IntentUtils;
 import com.uiho.sgmw.common.utils.StringUtils;
 import com.uiho.sgmw.common.utils.UserUtils;
 import com.uiho.sgmw.common.utils.glide.ImageLoadUtils;
@@ -24,6 +26,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * 作者：uiho_mac
@@ -84,6 +87,13 @@ public class PalmBottomFragment extends BaseFragment {
             }
 
         }
+    }
+
+    @OnClick(R2.id.ll_trip)
+    public void onViewClicked() {
+        Bundle bundle = new Bundle();
+        bundle.putString("vin", vin);
+        IntentUtils.get().goActivity(mContext, TravelStatisticsActivity.class, bundle);
     }
 
     @Override

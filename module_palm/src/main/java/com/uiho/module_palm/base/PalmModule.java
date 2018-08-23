@@ -1,5 +1,6 @@
 package com.uiho.module_palm.base;
 
+import com.uiho.sgmw.common.base.BaseApi;
 import com.uiho.sgmw.common.https.RetrofitManager;
 
 /**
@@ -12,5 +13,8 @@ import com.uiho.sgmw.common.https.RetrofitManager;
 public class PalmModule {
     public static PalmService createrRetofit(){
         return RetrofitManager.getInstance().getRetrofitService(PalmService.class);
+    }
+    public static PalmService createAppVerSionRetrofit() {
+        return RetrofitManager.getInstance().getRetrofitServiceByUrl(BaseApi.OTHER_HOST, PalmService.class);
     }
 }

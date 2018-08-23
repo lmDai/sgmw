@@ -102,7 +102,7 @@ public class SystemUtils {
         return encodeMD5(encodeMD5(password).substring(8, 24));
     }
 
-    private static String encodeMD5(String str) {
+    public static String encodeMD5(String str) {
         String strDigest;
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -151,8 +151,7 @@ public class SystemUtils {
         }
         String[] version1Array = version1.split("\\.");
         String[] version2Array = version2.split("\\.");
-        Log.d("HomePageActivity", "version1Array==" + version1Array.length);
-        Log.d("HomePageActivity", "version2Array==" + version2Array.length);
+
         int index = 0;
         // 获取最小长度值
         int minLen = Math.min(version1Array.length, version2Array.length);
@@ -208,5 +207,15 @@ public class SystemUtils {
     public static void unSubscribe(CompositeDisposable cd) {
         if (cd != null && !cd.isDisposed())
             cd.dispose();
+    }
+
+    /**
+     * 判断是否安装目标应用
+     *
+     * @param packageName 目标应用安装后的包名
+     * @return 是否已安装目标应用
+     */
+    public static boolean isInstallByread(String packageName) {
+        return new File("/data/data/" + packageName).exists();
     }
 }

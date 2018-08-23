@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="@dimen/dp_70"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="平均耗电(度)"
+                            android:textColor="@color/color_text_hint"
+                            android:textSize="@dimen/sp_12" />
+
+                        <TextView
+                            android:id="@+id/txt_total"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="54612"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/sp_20" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/dp_20"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:background="@color/color_text_hint" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="充电次数(次)"
+                            android:textColor="@color/color_text_hint"
+                            android:textSize="@dimen/sp_12" />
+
+                        <TextView
+                            android:id="@+id/txt_speed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="15"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/sp_20" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <com.flyco.tablayout.SegmentTabLayout
+                    android:id="@+id/tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_36"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_10"
+                    app:tl_bar_color="@color/color_trans"
+                    app:tl_bar_stroke_color="@color/color_line"
+                    app:tl_divider_color="@color/color_line"
+                    app:tl_indicator_color="@color/color_orange"
+                    app:tl_indicator_corner_radius="@dimen/dp_10"
+                    app:tl_tab_padding="@dimen/dp_20"
+                    app:tl_textSelectColor="@color/color_white"
+                    app:tl_textUnselectColor="@color/color_white" />
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>

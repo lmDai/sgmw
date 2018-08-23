@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_chouti"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/design_bottom_sheet_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:visibility="visible"
+        app:layout_anchor="@id/bottom_sheet"
+        app:layout_anchorGravity="top">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/color_white">
+
+            <ImageView
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="@dimen/dp_10"
+                android:src="@drawable/ic_black_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="停车场"
+                android:textColor="@color/color_black"
+                android:textSize="16sp" />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include layout="@layout/base_top_search" />
+
+        <RelativeLayout
+            android:id="@+id/rl_zoom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="?android:attr/actionBarSize"
+            android:padding="@dimen/dp_4">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/bg_round_white">
+
+                <ImageButton
+                    android:id="@+id/ib_car"
+                    style="@style/Base.Widget.AppCompat.ImageButton"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_42"
+                    android:background="@drawable/ic_position_car"
+                    android:gravity="center"
+                    android:src="@drawable/normal_bg_selector" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/ib_car"
+                    android:background="@color/color_line" />
+
+                <ImageButton
+                    android:id="@+id/ib_postion"
+                    style="@style/Base.Widget.AppCompat.ImageButton"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_below="@+id/view"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/ic_position_me"
+                    android:src="@drawable/normal_bg_selector" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/bg_round_white">
+
+                <Button
+                    android:id="@+id/btn_add"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_42"
+                    android:background="@drawable/normal_bg_selector"
+                    android:gravity="center"
+                    android:text="@string/zoom_in"
+                    android:textSize="@dimen/sp_20" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_below="@+id/btn_add"
+                    android:background="@color/color_line" />
+
+                <Button
+                    android:id="@+id/btn_del"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_below="@+id/view2"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/normal_bg_selector"
+                    android:text="@string/zoom_out"
+                    android:textSize="@dimen/sp_20" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txt_up"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:background="@color/color_white"
+            android:gravity="center"
+            android:text="点击查看更多"
+            android:textColor="@color/color_text_normal" />
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="@dimen/dp_280"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <include layout="@layout/layout_bottom_sheet" />
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
