@@ -16,7 +16,7 @@ public class EventParameter {
     public final static String EXTRA_FROM_MYASSETS = "myAssets";//我的资产
     public final static String EXTRA_FROM_MYASSETS_RECHARGE = "recharge";//充值
     public final static String EXTRA_FROM_PRODUCT = "product";//产品详情
-    public final static String EXTRA_FROM_HOME = "home";//首页
+    public final static String EXTRA_FROM_PALM = "palm";//掌上宝骏
     public final static String EXTRA_FROM_HTML = "html";//H5页面
 
 }

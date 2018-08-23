@@ -234,7 +234,9 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMainThread(EventType type) {
-
+        if (type.getType() == EventType.PALM) {
+            initData();
+        }
     }
 
     /**

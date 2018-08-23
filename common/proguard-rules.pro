@@ -55,6 +55,7 @@
 -keep class com.google.gson.stream.** { *; }
 -keepattributes EnclosingMethod
 -keep class com.uiho.sgmw.common.model.**{*;}###这是你定义的实体类
+-keep class com.uiho.sgmw.common.base.**{*;}###这是你定义的实体类
 # ARouter
 -keep public class com.alibaba.android.arouter.routes.**{*;}
 -keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}

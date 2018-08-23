@@ -33,6 +33,8 @@ public class EventType {
     public static final int EVENT_AUTH_SUCCESS_FROM_HTML = 1037;//从H5页面跳转过来的
 
     public static final int TO_REA_NNAME_AUTHENTICATION = 1040;//产品详情，没有实名认证
+    public static final int STOP_REFRESH = 1041;//停止刷新
+    public static final int PALM = 1042;//掌上宝骏
 
 
     private int mType = -1;

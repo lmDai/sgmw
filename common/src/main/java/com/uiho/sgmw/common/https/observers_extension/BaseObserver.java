@@ -4,12 +4,18 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.uiho.sgmw.common.R;
+import com.uiho.sgmw.common.base.RouterPath;
+import com.uiho.sgmw.common.base.ViewManager;
+import com.uiho.sgmw.common.eventbus.EventType;
 import com.uiho.sgmw.common.https.exception.ApiException;
 import com.uiho.sgmw.common.https.exception.ExceptionUtil;
 import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.SystemUtils;
 import com.uiho.sgmw.common.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.ref.WeakReference;
 
@@ -62,11 +68,12 @@ public abstract class BaseObserver<T> implements Observer<T> {
 
     public void onFailure(Throwable e, int code, String errorMsg) {
         EventUtil.showToast(Utils.getContext(), errorMsg);
-//        if (code == 401) {
-//            if (e instanceof ApiException) {
-//                ViewManager.getInstance().finishAllActivity();
-//                ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).navigation();
-//            }
-//        }
+        EventBus.getDefault().post(new EventType(EventType.STOP_REFRESH));
+        if (code == 401) {
+            if (e instanceof ApiException) {
+                ViewManager.getInstance().finishAllActivity();
+                ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).navigation();
+            }
+        }
     }
 }

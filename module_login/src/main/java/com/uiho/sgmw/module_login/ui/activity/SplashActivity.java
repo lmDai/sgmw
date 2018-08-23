@@ -50,7 +50,7 @@ public class SplashActivity extends BaseMvpActivity<SplashContract.View, SplashP
                     if (!StringUtils.isEmpty(token)) {
                         getMvpPresenter().verifyLogin(token);
                     } else {
-                        ARouterUtils.goPage(RouterPath.MAIN_ACTIVITY);
+                        ARouterUtils.goPage(RouterPath.LOGIN_ACTIVITY);
                         finish();
                     }
                 });

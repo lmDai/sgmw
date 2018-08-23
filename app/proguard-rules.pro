@@ -159,3 +159,24 @@
 -keepclassmembers class com.ljd.example.JSInterface {
     <methods>;
 }
+-keep class org.xmlpull.v1.** { *;}
+-dontwarn org.xmlpull.v1.**
+
+# keep annotated by NotProguard
+ -keep @com.uiho.sgmw.common.base.BasePresenter.CreatePresenterAnnotation class * {*;}
+ -keep class * {
+ @com.uiho.sgmw.common.base.BasePresenter.CreatePresenterAnnotation <fields>;
+ }
+  -keepclassmembers class * {
+ @com.uiho.sgmw.common.base.BasePresenter.CreatePresenterAnnotation <methods>;
+ }
+ -keepattributes *Annotation*
+ -keepclassmembers class ** {
+     @org.greenrobot.eventbus.Subscribe <methods>;
+ }
+ -keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+ # Only required if you use AsyncExecutor
+ -keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+     <init>(java.lang.Throwable);
+ }

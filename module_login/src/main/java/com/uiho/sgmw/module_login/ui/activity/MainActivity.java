@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -20,11 +21,14 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.uiho.sgmw.common.BuildConfig;
 import com.uiho.sgmw.common.base.BaseMvpActivity;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.base.ViewManager;
+import com.uiho.sgmw.common.eventbus.EventType;
 import com.uiho.sgmw.common.https.RxBus;
 import com.uiho.sgmw.common.model.DownloadModel;
 import com.uiho.sgmw.common.model.UpdateModel;
@@ -42,6 +46,10 @@ import com.uiho.sgmw.module_login.R;
 import com.uiho.sgmw.module_login.R2;
 import com.uiho.sgmw.module_login.contract.MainContract;
 import com.uiho.sgmw.module_login.presenter.MainPresenter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -82,10 +90,12 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     String apkPath = Environment.getExternalStorageDirectory().getPath() + "/sgmw.apk";
     private Fragment palmTopFragment;
     private Fragment palmBottomFragment;
+    private int currentPosition = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         if (rxPermission == null) {
             rxPermission = new RxPermissions(this);
         }
@@ -118,6 +128,7 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
                 super.onPageSelected(position);
                 bottomViewPager.resetHeight(position);//设置viewpager高度
                 topViewpager.resetHeight(position);
+                currentPosition = position;
             }
         });
         topViewpager.addOnPageChangeListener(new BaseLinkPageChangeListener(topViewpager, bottomViewPager) {
@@ -135,6 +146,29 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
                 topViewpager.resetHeight(position);
             }
         });
+
+        smartLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                if (currentPosition == 0) {
+                    EventBus.getDefault().post(new EventType(EventType.PALM));
+                }
+//                } else if (currentPosition == 1) {
+//                    EventBus.getDefault().post(EventParameter.EXTRA_FROM_PALM);
+//                } else if (currentPosition == 2) {
+//                    EventBus.getDefault().post(EventParameter.EXTRA_FROM_PALM);
+//                } else if (currentPosition == 3) {
+//                    EventBus.getDefault().post(EventParameter.EXTRA_FROM_PALM);
+//                }
+            }
+        });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void stopRefresh(EventType eventType) {
+        if (eventType.getType() == EventType.STOP_REFRESH) {
+            smartLayout.finishRefresh();
+        }
     }
 
     /**
@@ -292,6 +326,7 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     @Override
     protected void onResume() {
         super.onResume();
+        currentPosition = topViewpager.getCurrentItem();
         topViewpager.requestLayout();
         bottomViewPager.requestLayout();
     }
@@ -304,6 +339,7 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
