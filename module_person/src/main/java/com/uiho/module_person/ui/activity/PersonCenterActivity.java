@@ -2,6 +2,7 @@ package com.uiho.module_person.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import com.uiho.sgmw.common.utils.ARouterUtils;
 import com.uiho.sgmw.common.utils.SPUtils;
 import com.uiho.sgmw.common.utils.UserUtils;
 import com.uiho.sgmw.common.utils.glide.ImageLoadUtils;
+import com.uiho.sgmw.common.widget.SelectorFactory;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -76,6 +78,44 @@ public class PersonCenterActivity extends BaseMvpActivity<PersonCenterContract.V
             ImageLoadUtils.displayRoundError(mContext, imgHead, userModel.getAvatar(), R.drawable.user);
             txtNickName.setText(userModel.getXm());
         }
+        ibBack.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_trans))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_white_trans))
+                .setCornerRadius(10)
+                .create());
+        //基本信息
+        layoutBasic.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_white))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_white))
+                .create());
+        //我的余额
+        layoutCount.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_white))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_white))
+                .create());
+        //积分
+        layoutIntergral.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_white))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_white))
+                .create());
+        //消息
+        layoutMessage.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_white))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_white))
+                .create());
+        //设置
+        layoutSetting.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_white))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_white))
+                .create());
+
+        //注销
+        layoutLogout.setBackground(SelectorFactory.newShapeSelector()
+                .setDefaultBgColor(ContextCompat.getColor(this, R.color.color_white))
+                .setPressedBgColor(ContextCompat.getColor(this, R.color.color_85_white))
+                .create());
+
+
     }
 
     @OnClick({R2.id.ib_back, R2.id.layout_basic, R2.id.layout_count, R2.id.layout_intergral, R2.id.layout_message, R2.id.layout_setting, R2.id.layout_logout})

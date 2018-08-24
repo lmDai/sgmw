@@ -67,7 +67,7 @@ public abstract class BaseObserver<T> implements Observer<T> {
         EventBus.getDefault().post(new EventType(EventType.STOP_REFRESH));
         if (code == 401) {//登录失效处理
             if (e instanceof ApiException) {
-//                EventBus.getDefault().post(new EventType(EventType.EVENT_NO_LOGIN));
+                EventBus.getDefault().post(new EventType(EventType.EVENT_NO_LOGIN));
             }
         } else {
             EventUtil.showToast(Utils.getContext(), errorMsg);

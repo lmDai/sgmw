@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -114,13 +113,9 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
     TextView txtFence;
     @BindView(R2.id.layout_elec_fence)
     LinearLayout layoutElecFence;
-    private MarkerOptions markerOption;
-    private GeoFenceClient mGeoFenceClient;
     private String token;
-    private String phoneNum;
     public String vin;
     private CarStatusModel status;
-    private UserModel userModel;
     private Polygon polygon;
     private boolean hideVin = true;
     private Marker marker;
@@ -131,14 +126,14 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
         super.onViewCreated(view, savedInstanceState);
         setMapCustomStyleFile(mContext);
         aMap.setMapCustomEnable(true);//开启自定义
-        mGeoFenceClient = new GeoFenceClient(mContext);
+        GeoFenceClient mGeoFenceClient = new GeoFenceClient(mContext);
     }
 
     @Override
     protected void initView(LayoutInflater inflater) {
         super.initView(inflater);
         txtTime.setText(DateUtils.formatDate(new Date(), "MM.dd") + " " + DateUtils.getWeek(new Date()));
-        userModel = UserUtils.getUser(mContext);
+        UserModel userModel = UserUtils.getUser(mContext);
         if (userModel != null) {
             ImageLoadUtils.displayRound(mContext, imgHead, userModel.getAvatar());
             if (!TextUtils.isEmpty(userModel.getVins())) {
@@ -164,22 +159,19 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
         super.initEvent();
         initData();
         //设置防盗报警开关
-        switchAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (vin != null) {
-                    if (isChecked) {
-                        getMvpPresenter().setBurglarAlarm(AESUtil.encrypt(vin, Constants.WARN_SETTING_KEY), 1, token);
-                    } else {
-                        getMvpPresenter().setBurglarAlarm(AESUtil.encrypt(vin, Constants.WARN_SETTING_KEY), 0, token);
-                    }
+        switchAlarm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (vin != null) {
+                if (isChecked) {
+                    getMvpPresenter().setBurglarAlarm(AESUtil.encrypt(vin, Constants.WARN_SETTING_KEY), 1, token);
+                } else {
+                    getMvpPresenter().setBurglarAlarm(AESUtil.encrypt(vin, Constants.WARN_SETTING_KEY), 0, token);
                 }
             }
         });
     }
 
     public void initData() {
-        phoneNum = (String) SPUtils.getParam(mContext, Constants.PHONE, "");
+        String phoneNum = (String) SPUtils.getParam(mContext, Constants.PHONE, "");
         token = (String) SPUtils.getParam(mContext, Constants.TOKEN, "");
         getMvpPresenter().getUserInfo(phoneNum, token);//获取个人信息
     }
@@ -335,7 +327,7 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
      */
     public void setMarker(Double longitude, Double latitude, double orientation) {
         LatLng latLng = new LatLng(latitude, longitude);
-        markerOption = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_position))
+        MarkerOptions markerOption = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_position))
                 .position(latLng)
                 .draggable(true);
         if (marker != null) {

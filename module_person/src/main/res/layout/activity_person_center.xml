@@ -26,8 +26,8 @@
 
                 <ImageButton
                     android:id="@+id/ib_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/dp_42"
+                    android:layout_height="@dimen/dp_42"
                     android:background="@null"
                     android:padding="@dimen/dp_10"
                     android:src="@drawable/ic_back" />
@@ -62,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:clickable="true"
-                android:background="@color/color_white"
                 android:layout_marginTop="@dimen/dp_10"
                 android:minHeight="@dimen/dp_48"
                 android:paddingLeft="@dimen/dp_10"
@@ -99,7 +98,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/color_white"
                 android:layout_marginTop="@dimen/dp_10"
                 android:minHeight="@dimen/dp_48"
                 android:paddingLeft="@dimen/dp_10"
@@ -160,7 +158,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@color/color_white"
                 android:minHeight="@dimen/dp_48"
                 android:paddingLeft="@dimen/dp_10"
                 android:paddingRight="@dimen/dp_10">
@@ -211,7 +208,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/color_white"
                 android:orientation="vertical">
 
 
@@ -298,7 +294,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_10"
-                android:background="@color/color_white"
                 android:orientation="vertical">
 
 
