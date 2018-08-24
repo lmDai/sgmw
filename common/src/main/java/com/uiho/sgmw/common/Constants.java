@@ -16,7 +16,7 @@ public class Constants {
     public static final String PATH_CACHE = PATH_DATA + File.separator + "NetCache";
     //系统相关
     public static final String USER = "user";//用户信息
-    public static final int REQUEST_LOCATION = 0x001;
+    public static final int REQUEST_LOCATION = 0x001;//定位权限申请
     public static final int REQUEST_EXTERNAL = 0x002;//存储权限申请
     public static final String PHONE = "phone";//手机号
     public static final String VIN = "vin";//车架号

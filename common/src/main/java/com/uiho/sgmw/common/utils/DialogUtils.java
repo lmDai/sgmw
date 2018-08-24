@@ -10,6 +10,7 @@ import com.uiho.sgmw.common.R;
 import com.uiho.sgmw.common.widget.dialog.CommonDialog;
 import com.uiho.sgmw.common.widget.dialog.DialogListener;
 import com.uiho.sgmw.common.widget.dialog.IProgressDialog;
+import com.uiho.sgmw.common.widget.dialog.TokenInvalidDialog;
 import com.uiho.sgmw.common.widget.dialog.UpdateDialog;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -34,6 +35,25 @@ public class DialogUtils {
      */
     public static void showPromptDialog(Context mContext, String content, String title, String positive, String negative, DialogListener listener) {
         new CommonDialog(mContext, R.style.common_dialog, content, (dialog, confirm) -> {
+            if (confirm) {
+                dialog.dismiss();
+            }
+            listener.onClick(confirm);
+        }).setTitle(title).setPositiveButton(positive).setNegativeButton(negative).show();
+    }
+
+    /**
+     * 提示框
+     *
+     * @param mContext 上下文
+     * @param content  提示内容
+     * @param title    标题
+     * @param positive 确定按钮
+     * @param negative 取消按钮
+     * @param listener 点击监听
+     */
+    public static void showTokenInvalidDialog(Context mContext, String content, String title, String positive, String negative, DialogListener listener) {
+        new TokenInvalidDialog(mContext, R.style.common_dialog, content, (dialog, confirm) -> {
             if (confirm) {
                 dialog.dismiss();
             }

@@ -48,8 +48,6 @@ import com.uiho.sgmw.module_login.contract.MainContract;
 import com.uiho.sgmw.module_login.presenter.MainPresenter;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -95,7 +93,6 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         if (rxPermission == null) {
             rxPermission = new RxPermissions(this);
         }
@@ -164,8 +161,9 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
         });
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void stopRefresh(EventType eventType) {
+    @Override
+    public void onEventType(EventType eventType) {
+        super.onEventType(eventType);
         if (eventType.getType() == EventType.STOP_REFRESH) {
             smartLayout.finishRefresh();
         }
@@ -339,7 +337,6 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override

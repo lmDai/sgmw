@@ -19,7 +19,11 @@ import android.widget.TextView;
 
 import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.uiho.sgmw.common.R;
+import com.uiho.sgmw.common.eventbus.EventType;
 import com.uiho.sgmw.common.utils.StatusBarCompatUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -92,7 +96,13 @@ public abstract class BaseFragment extends RxFragment {
                 }
             }
         }
+        EventBus.getDefault().register(this);
         return rootView;
+    }
+
+    @Subscribe
+    public void onEventType(EventType eventType) {
+
     }
 
     protected void initStatusBar() {
@@ -159,6 +169,7 @@ public abstract class BaseFragment extends RxFragment {
         // view被销毁后，将可以重新触发数据懒加载，因为在viewpager下，fragment不会再次新建并走onCreate的生命周期流程，将从onCreateView开始
         hasFetchData = false;
         isViewPrepared = false;
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

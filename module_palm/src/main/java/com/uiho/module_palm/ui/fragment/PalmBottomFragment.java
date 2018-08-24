@@ -21,7 +21,6 @@ import com.uiho.sgmw.common.utils.UserUtils;
 import com.uiho.sgmw.common.utils.glide.ImageLoadUtils;
 import com.uiho.sgmw.common.widget.lableview.LabelImageView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -51,11 +50,6 @@ public class PalmBottomFragment extends BaseFragment {
     TextView txttime;
     private String vin = "";
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-    }
 
     @Override
     protected int getLayout() {
@@ -99,6 +93,5 @@ public class PalmBottomFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 }

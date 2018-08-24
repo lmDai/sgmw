@@ -34,4 +34,8 @@ public class RouterPath {
     public static final String PALM_CHARGE_INFO_YEAR = "/module_palm/charge_info_year_fragment";//年充电信息
 
     public static final String PALM_TRAVEL_PATH = "/module_palm/travel_path_activity";//行驶轨迹
+    /**
+     * 个人中心
+     */
+    public static final String PERSON_CENTER_MAIN = "/module_person/person_center_activity";//个人中心
 }

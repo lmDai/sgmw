@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -24,13 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.amap.api.location.AMapLocation;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.Circle;
@@ -38,7 +33,6 @@ import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.amap.api.services.core.LatLonPoint;
@@ -53,17 +47,15 @@ import com.uiho.module_palm.R2;
 import com.uiho.module_palm.contract.ParksContract;
 import com.uiho.module_palm.presenter.ParksPresenter;
 import com.uiho.module_palm.ui.adapter.ParkAdapter;
-import com.uiho.sgmw.common.base.BaseMvpActivity;
+import com.uiho.sgmw.common.base.BaseMapActivity;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.model.ParksModel;
 import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
 import com.uiho.sgmw.common.utils.AdapterUtil;
-import com.uiho.sgmw.common.utils.GDLocationUtils;
 import com.uiho.sgmw.common.utils.IntentUtils;
 import com.uiho.sgmw.common.utils.RecyclerViewUtils;
 import com.uiho.sgmw.common.utils.SystemUtils;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -85,9 +77,8 @@ import static com.uiho.sgmw.common.utils.IntentUtils.OPEN_ACTIVITY_KEY;
  */
 @CreatePresenterAnnotation(ParksPresenter.class)
 @Route(path = RouterPath.PALM_PARK) // 路由地址，必须注明
-public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPresenter> implements ParksContract.View {
-    @BindView(R2.id.map_view)
-    MapView mapView;
+public class ParkActivity extends BaseMapActivity<ParksContract.View, ParksPresenter> implements ParksContract.View {
+
     @BindView(R2.id.recyclerview)
     RecyclerView recyclerview;
     @BindView(R2.id.bottom_sheet)
@@ -110,65 +101,22 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
     AppBarLayout appSearchBar;
     @BindView(R2.id.frame_layout)
     FrameLayout frameLayout;
-    private AMap aMap;
     private BottomSheetBehavior<RelativeLayout> behavior;
     private final List<ParksModel> mList = new ArrayList<>();
     private ParkAdapter adapter;
     private double longitude, latitude;
     private List<Marker> markers = new ArrayList<>();
     private LatLng latLngCar;
-    private LatLng latLngMy;
     private boolean setBottomSheetHeight = false;
     private List<ParksModel> newList = new ArrayList<>();
     private long firstTime = 0L;
     private Marker screenMarker;
     private Circle circle;//圆形覆盖物
 
-    /**
-     * 初始化地图
-     */
-    private void initMap() {
-        aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                latLngMy = new LatLng(location.getLatitude(), location.getLongitude());
-            }
-        });
-        MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_position);
-        myLocationStyle.myLocationIcon(bitmapDescriptor);//设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
-        myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
-        myLocationStyle.strokeWidth(0);//设置定位蓝点精度圈的边框宽度的方法。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        UiSettings mUiSettings = aMap.getUiSettings();
-        mUiSettings.setZoomPosition(1000);
-        mUiSettings.setZoomControlsEnabled(false);  //显示隐藏 缩放地图
-        mUiSettings.setRotateGesturesEnabled(false);
-        mUiSettings.setMyLocationButtonEnabled(false);
-        mUiSettings.setLogoBottomMargin(-50);//隐藏logo
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));//设置地图默认显示缩放层级
-        aMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
-            @Override
-            public void onMapLoaded() {
-                addMarkerInScreenCenter();//添加屏幕中心marker
-            }
-        });
-    }
-
     @Override
     protected void initView(Bundle savedInstanceState) {
         setTopTitle("输入地点关键字，查找周边停车场");
-        mapView.onCreate(savedInstanceState);
-        //初始化地图控制器对象
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
-        initMap();
-
+        mMapView = findViewById(R.id.map_view);
         bottomSheetBar.setVisibility(View.INVISIBLE);
         final Drawable upArrow = ContextCompat.getDrawable(mContext, R.drawable.ic_black_back);
         if (upArrow != null) {
@@ -226,6 +174,7 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
                 }
             }
         });
+        super.initView(savedInstanceState);
     }
 
     /**
@@ -264,15 +213,6 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
 
     @Override
     protected void initEvent() {
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
-        GDLocationUtils.getLocation(new GDLocationUtils.MyLocationListener() {
-            @Override
-            public void result(AMapLocation location) {
-
-            }
-        });
         Intent intent = getIntent();
         if (intent != null) {
             latLngCar = intent.getParcelableExtra(OPEN_ACTIVITY_KEY);
@@ -291,8 +231,14 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 ParksModel parksModel = (ParksModel) adapter.getData().get(position);
                 if (view.getId() == R.id.txt_go) {//打开高德地图
-                    setUpGaodeAppByMine(parksModel.getLatitude(), parksModel.getLongitude(), parksModel.getName());
+                    SystemUtils.setUpGaodeAppByMine(mContext, parksModel.getLatitude(), parksModel.getLongitude(), parksModel.getName());
                 }
+            }
+        });
+        aMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
+            @Override
+            public void onMapLoaded() {
+                addMarkerInScreenCenter();//添加屏幕中心marker
             }
         });
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -417,29 +363,6 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
         return new ArrayList<>(set);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mapView != null)
-            mapView.onDestroy();
-    }
-
-    /**
-     * 我的位置BY高德
-     */
-    private void setUpGaodeAppByMine(double LATITUDE_B, double LONGTITUDE_B, String name) {
-        try {
-            //noinspection deprecation
-            Intent intent = Intent.getIntent("androidamap://route?sourceApplication=softname&sname=我的位置&dlat=" + LATITUDE_B + "&dlon=" + LONGTITUDE_B + "&dname=" + name + "&dev=1&m=2&t=3");
-            if (SystemUtils.isInstallByread("com.autonavi.minimap")) {
-                startActivity(intent);
-            } else {
-                Log.e("single", "没有安装高德地图客户端");
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * 显示停车场Location
@@ -452,9 +375,6 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
             newLatLng = new LatLng(park.getLatitude(), park.getLongitude());
         }
         CameraUpdate mCameraUpdate = CameraUpdateFactory.newCameraPosition(new CameraPosition(newLatLng, aMap.getCameraPosition().zoom, 0, 0));
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
         aMap.moveCamera(mCameraUpdate);
         if (park != null) {
             for (Marker marker : aMap.getMapScreenMarkers()) {
@@ -505,7 +425,7 @@ public class ParkActivity extends BaseMvpActivity<ParksContract.View, ParksPrese
         if (i == R.id.ib_car) {
             setParkLocation(latLngCar, null);
         } else if (i == R.id.ib_postion) {
-            setParkLocation(latLngMy, null);
+            setParkLocation(myLatLng, null);
         } else if (i == R.id.btn_add) {
             aMap.moveCamera(CameraUpdateFactory.zoomIn());
         } else if (i == R.id.btn_del) {

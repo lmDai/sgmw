@@ -13,10 +13,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.uiho.sgmw.common.R;
+import com.uiho.sgmw.common.eventbus.EventType;
+import com.uiho.sgmw.common.utils.DialogUtils;
 import com.uiho.sgmw.common.utils.StatusBarCompatUtils;
 import com.uiho.sgmw.common.utils.SystemUtils;
+import com.uiho.sgmw.common.utils.Utils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -67,6 +74,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         initView(savedInstanceState);
         initEvent();
         initStatusBar();
+        EventBus.getDefault().register(this);
     }
 
     /**
@@ -137,6 +145,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         if (mUnBinder != null)
             mUnBinder.unbind();
         ViewManager.getInstance().finishActivity(this);
+        EventBus.getDefault().unregister(this);
     }
 
     protected abstract int getLayout();
@@ -147,6 +156,19 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     protected void getIntentData() {
+    }
+
+    @Subscribe
+    public void onEventType(EventType eventType) {
+        if (eventType.getType() == EventType.EVENT_NO_LOGIN) {
+            DialogUtils.showTokenInvalidDialog(mContext, Utils.getString(R.string.No_Login_Exception),
+                    "温馨提示", "去登录", "取消", confirm -> {
+                        if (confirm) {
+                            ViewManager.getInstance().finishAllActivity();
+                            ARouter.getInstance().build(RouterPath.LOGIN_ACTIVITY).navigation();
+                        }
+                    });
+        }
     }
 
     @Override
@@ -161,4 +183,5 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
 }

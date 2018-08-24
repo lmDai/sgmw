@@ -2,6 +2,7 @@ package com.uiho.sgmw.common.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.MessageDigest;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -217,5 +219,22 @@ public class SystemUtils {
      */
     public static boolean isInstallByread(String packageName) {
         return new File("/data/data/" + packageName).exists();
+    }
+
+    /**
+     * 我的位置BY高德
+     */
+    public static void setUpGaodeAppByMine(Context mContext, double LATITUDE_B, double LONGTITUDE_B, String name) {
+        try {
+            //noinspection deprecation
+            Intent intent = Intent.getIntent("androidamap://route?sourceApplication=softname&sname=我的位置&dlat=" + LATITUDE_B + "&dlon=" + LONGTITUDE_B + "&dname=" + name + "&dev=1&m=2&t=3");
+            if (SystemUtils.isInstallByread("com.autonavi.minimap")) {
+                mContext.startActivity(intent);
+            } else {
+                Log.e("single", "没有安装高德地图客户端");
+            }
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
     }
 }

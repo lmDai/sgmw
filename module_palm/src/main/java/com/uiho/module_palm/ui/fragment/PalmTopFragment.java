@@ -1,9 +1,7 @@
 package com.uiho.module_palm.ui.fragment;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -21,27 +19,19 @@ import android.widget.TextView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.amap.api.fence.GeoFenceClient;
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdate;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polygon;
 import com.uiho.module_palm.R;
 import com.uiho.module_palm.R2;
-import com.uiho.module_palm.base.BasePalmFragment;
 import com.uiho.module_palm.contract.PalmTopContract;
 import com.uiho.module_palm.presenter.PalmTopPresenter;
 import com.uiho.module_palm.ui.activity.ElectricFenceActivity;
 import com.uiho.module_palm.ui.activity.ParkActivity;
 import com.uiho.sgmw.common.Constants;
+import com.uiho.sgmw.common.base.BaseMapFragment;
 import com.uiho.sgmw.common.base.RouterPath;
 import com.uiho.sgmw.common.eventbus.EventType;
 import com.uiho.sgmw.common.model.BurglarAlarmModel;
@@ -51,6 +41,7 @@ import com.uiho.sgmw.common.model.CarStatusModel;
 import com.uiho.sgmw.common.model.UserModel;
 import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
 import com.uiho.sgmw.common.utils.AESUtil;
+import com.uiho.sgmw.common.utils.ARouterUtils;
 import com.uiho.sgmw.common.utils.DateUtils;
 import com.uiho.sgmw.common.utils.IntentUtils;
 import com.uiho.sgmw.common.utils.SPUtils;
@@ -71,7 +62,6 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * 作者：uiho_mac
@@ -82,7 +72,7 @@ import butterknife.Unbinder;
  */
 @CreatePresenterAnnotation(PalmTopPresenter.class)
 @Route(path = RouterPath.PALM_TOP_FRAGMENT) // 路由地址，必须注明
-public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, PalmTopPresenter>
+public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmTopPresenter>
         implements PalmTopContract.View {
     @BindView(R2.id.txt_time)
     TextView txtTime;
@@ -114,8 +104,6 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
     TextView txtDoor;
     @BindView(R2.id.txt_timestamp)
     TextView txtTimestamp;
-    @BindView(R2.id.map_view)
-    MapView mapView;
     @BindView(R2.id.txt_car_time)
     TextView txtCarTime;
     @BindView(R2.id.ib_postion)
@@ -126,8 +114,6 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
     TextView txtFence;
     @BindView(R2.id.layout_elec_fence)
     LinearLayout layoutElecFence;
-    Unbinder unbinder;
-    private UiSettings mUiSettings;
     private MarkerOptions markerOption;
     private GeoFenceClient mGeoFenceClient;
     private String token;
@@ -138,29 +124,19 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
     private Polygon polygon;
     private boolean hideVin = true;
     private Marker marker;
-    private AMap aMap;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mMapView = view.findViewById(R.id.map_view);
         super.onViewCreated(view, savedInstanceState);
-        mapView.onCreate(savedInstanceState);
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
         setMapCustomStyleFile(mContext);
         aMap.setMapCustomEnable(true);//开启自定义
-        initMap();
         mGeoFenceClient = new GeoFenceClient(mContext);
     }
 
     @Override
     protected void initView(LayoutInflater inflater) {
+        super.initView(inflater);
         txtTime.setText(DateUtils.formatDate(new Date(), "MM.dd") + " " + DateUtils.getWeek(new Date()));
         userModel = UserUtils.getUser(mContext);
         if (userModel != null) {
@@ -208,71 +184,11 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
         getMvpPresenter().getUserInfo(phoneNum, token);//获取个人信息
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapView.onResume();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mapView != null)
-            mapView.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMainThread(EventType type) {
         if (type.getType() == EventType.PALM) {
             initData();
         }
-    }
-
-    /**
-     * 初始化地图
-     */
-    private void initMap() {
-        aMap.setOnMyLocationChangeListener(new AMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-
-            }
-        });
-        MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_position);
-        myLocationStyle.myLocationIcon(bitmapDescriptor);//设置定位蓝点的icon图标方法，需要用到BitmapDescriptor类对象作为参数。
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);//连续定位、蓝点不会移动到地图中心点，并且蓝点会跟随设备移动。
-        myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));// 设置圆形的边框颜色
-        myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
-        myLocationStyle.strokeWidth(0);//设置定位蓝点精度圈的边框宽度的方法。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        mUiSettings = aMap.getUiSettings();//实例化UiSettings类对象
-        mUiSettings.setZoomControlsEnabled(false);  //显示隐藏 缩放地图
-        mUiSettings.setLogoBottomMargin(-50);//隐藏logo
-        mUiSettings.setScrollGesturesEnabled(false);
-        mUiSettings.setZoomGesturesEnabled(false);
-    }
-
-    private void setLocation(Double longitude, Double latitude) {
-        if (latitude == 0 && longitude == 0) {
-            return;
-        }
-        CameraUpdate mCameraUpdate = CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(latitude, longitude), 18, 0, 0));
-        aMap.moveCamera(mCameraUpdate);
     }
 
     /**
@@ -422,15 +338,12 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
         markerOption = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_car_position))
                 .position(latLng)
                 .draggable(true);
-        if (aMap == null) {
-            aMap = mapView.getMap();
-        }
         if (marker != null) {
             marker.remove();
         }
         marker = aMap.addMarker(markerOption);
         marker.setRotateAngle(360 - (float) orientation);//设置车辆旋转角度
-        setLocation(longitude, latitude);
+        setLocation(new LatLng(latitude, longitude));
     }
 
     @Override
@@ -443,6 +356,7 @@ public class PalmTopFragment extends BasePalmFragment<PalmTopContract.View, Palm
         int i = view.getId();
         Bundle bundle = new Bundle();
         if (i == R.id.img_head) {
+            ARouterUtils.goPage(RouterPath.PERSON_CENTER_MAIN);
         } else if (i == R.id.btn_park) {
             if (marker != null) {
                 LatLng latLng = marker.getPosition();//传递车的位置到停车场页面
