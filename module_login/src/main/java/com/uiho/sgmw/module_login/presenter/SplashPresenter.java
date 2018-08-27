@@ -23,6 +23,11 @@ public class SplashPresenter extends SplashContract.Presenter {
                     public void onSuccess(Boolean result) {
                         getView().verifyLogin(result);//结果返回
                     }
+
+                    @Override
+                    public void onFailure(Throwable e, int code, String errorMsg) {
+                        getView().verifyLogin(false);//结果返回
+                    }
                 });
     }
 }
