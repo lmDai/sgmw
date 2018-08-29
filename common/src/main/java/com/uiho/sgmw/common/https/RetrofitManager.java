@@ -5,17 +5,13 @@ import com.google.gson.GsonBuilder;
 import com.uiho.sgmw.common.Constants;
 import com.uiho.sgmw.common.base.BaseApi;
 import com.uiho.sgmw.common.https.intercept.InterceptorUtil;
-import com.uiho.sgmw.common.model.FileResponseBody;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -120,20 +116,9 @@ public class RetrofitManager {
     public Retrofit createDownLoadRetrofit(String url) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .addInterceptor(new Interceptor() {
-                    @Override
-                    public Response intercept(Chain chain) throws IOException {
-                        Response originalResponse = chain.proceed(chain.request());
-                        return originalResponse
-                                .newBuilder()
-                                .body(new FileResponseBody(originalResponse))//将自定义的ResposeBody设置给它
-                                .build();
-                    }
-                })
                 .build();
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-
         Retrofit retrofit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(url)

@@ -1,5 +1,7 @@
 package com.uiho.sgmw.common;
 
+import android.os.Environment;
+
 import com.uiho.sgmw.common.base.BaseApplication;
 
 import java.io.File;
@@ -12,6 +14,8 @@ import java.io.File;
  * 修订历史：
  */
 public class Constants {
+    public final static String APP_ROOT_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + BaseApplication.getInstance().getPackageName();
+    public final static String DOWNLOAD_DIR = "/downlaod/";
     private static final String PATH_DATA = BaseApplication.getInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
     public static final String PATH_CACHE = PATH_DATA + File.separator + "NetCache";
     //系统相关

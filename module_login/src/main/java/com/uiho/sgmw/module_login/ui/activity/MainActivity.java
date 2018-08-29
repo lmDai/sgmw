@@ -39,6 +39,7 @@ import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.SystemUtils;
 import com.uiho.sgmw.common.utils.TabFragmentPagerAdapter;
 import com.uiho.sgmw.common.utils.TabPagerAdapter;
+import com.uiho.sgmw.common.utils.Utils;
 import com.uiho.sgmw.common.widget.BaseLinkPageChangeListener;
 import com.uiho.sgmw.common.widget.WrapContentHeightViewPager;
 import com.uiho.sgmw.common.widget.dialog.AppUpdateProgressDialog;
@@ -46,6 +47,7 @@ import com.uiho.sgmw.module_login.R;
 import com.uiho.sgmw.module_login.R2;
 import com.uiho.sgmw.module_login.contract.MainContract;
 import com.uiho.sgmw.module_login.presenter.MainPresenter;
+import com.uiho.sgmw.module_login.ui.AppUpdateService;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -72,6 +74,7 @@ import static com.uiho.sgmw.common.Constants.REQUEST_EXTERNAL;
 @Route(path = RouterPath.MAIN_ACTIVITY)
 public class MainActivity extends BaseMvpActivity<MainContract.View, MainContract.Presenter>
         implements MainContract.View {
+    private static final int DOWNLOADAPK_ID = 10;
     @BindView(R2.id.wrap_view_pager)
     WrapContentHeightViewPager topViewpager;
     @BindView(R2.id.slide_layout)
@@ -269,15 +272,15 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
         int isForceUpdate = SystemUtils.compareVersion(updateModel.getAndroid().getMinVersion(), appVersion);//是否需要强制更新
         int isUpdate = SystemUtils.compareVersion(updateModel.getAndroid().getLatestVersion(), appVersion);//是否可以更新
         if (isForceUpdate == 1) {//强制更新
-            DialogUtils.showUpdateDialog(mContext, updateModel.getAndroid().getContent(),
-                    "更新提示", "升级", "下次再说", false, confirm -> {
+            DialogUtils.showTokenInvalidDialog(mContext, updateModel.getAndroid().getContent(),
+                    Utils.getString(R.string.update_info), Utils.getString(R.string.update_now), Utils.getString(R.string.update_next), confirm -> {
                         if (confirm) {
                             startUpdate(url);
                         }
                     });
         } else if (isUpdate == 1) {
             DialogUtils.showUpdateDialog(mContext, updateModel.getAndroid().getContent(),
-                    "更新提示", "升级", "下次再说", true, confirm -> {
+                    Utils.getString(R.string.update_info), Utils.getString(R.string.update_now), Utils.getString(R.string.update_next), true, confirm -> {
                         if (confirm) {
                             startUpdate(url);
                         }
@@ -294,10 +297,21 @@ public class MainActivity extends BaseMvpActivity<MainContract.View, MainContrac
                 .subscribe(aBoolean -> {
                     if (aBoolean) {
 //                        if (showNegetive) {
-//                            AppUpdateService.start(mContext, apkPath, url);
+//                        AppUpdateService.start(mContext, apkPath, url);
 //                        } else {
-                        getMvpPresenter().updateApp(url, apkPath, cd);
-                        subScribeEvent(apkPath);
+//                        getMvpPresenter().updateApp(url, apkPath, cd);
+//                        subScribeEvent(apkPath);
+                        if (SystemUtils.isServiceRunning(mContext,AppUpdateService.class.getSimpleName())){
+                            EventUtil.showToast(mContext, Utils.getString(R.string.down_load));
+                            return;
+                        }
+                        Intent intent = new Intent(MainActivity.this, AppUpdateService.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("download_url", url);
+                        bundle.putInt("download_id", DOWNLOADAPK_ID);
+                        bundle.putString("download_file", url.substring(url.lastIndexOf('/') + 1));
+                        intent.putExtras(bundle);
+                        startService(intent);
 //                        }
                     } else {
                         DialogUtils.showPromptDialog(mContext, "检测到某些权限被禁止并设置了不再提醒,请您在设置-应用管理-权限管理中手动开启权限",

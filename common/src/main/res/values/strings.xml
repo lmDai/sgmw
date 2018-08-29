@@ -7,6 +7,7 @@
     <string name="empty_password">请输入密码</string>
     <string name="text_login">登录</string>
     <string name="login_failed">登录失败</string>
+    <string name="down_load">正在下载</string>
 
     <string name="zoom_in">+</string>
     <string name="zoom_out">—</string>
