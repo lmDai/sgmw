@@ -48,7 +48,6 @@ import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
 import com.uiho.sgmw.common.utils.AESUtil;
 import com.uiho.sgmw.common.utils.ARouterUtils;
 import com.uiho.sgmw.common.utils.DateUtils;
-import com.uiho.sgmw.common.utils.EventUtil;
 import com.uiho.sgmw.common.utils.GDLocationUtils;
 import com.uiho.sgmw.common.utils.IntentUtils;
 import com.uiho.sgmw.common.utils.SPUtils;
@@ -417,17 +416,13 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
 
     @Override
     public void onWeatherLiveSearched(LocalWeatherLiveResult weatherLiveResult, int rCode) {
-        if (rCode == 1000) {
+        if (rCode == 1000) {//返回天气信息
             if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
                 LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
                 txtAddress.setText(weatherlive.getCity());//城市
 //                weather.setText(weatherlive.getWeather());
                 txtTemper.setText(String.format("%s℃", weatherlive.getTemperature()));//温度
-            } else {
-                EventUtil.showToast(mContext, R.string.NO_WEATHER_DATA);
             }
-        } else {
-            EventUtil.showToast(mContext, R.string.NO_WEATHER_DATA);
         }
     }
 
