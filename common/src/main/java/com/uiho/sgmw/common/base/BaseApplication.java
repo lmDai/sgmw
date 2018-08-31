@@ -27,6 +27,7 @@ import com.uiho.sgmw.common.utils.Utils;
  */
 public class BaseApplication extends Application {
     private static BaseApplication mApplication;
+
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);//启用矢量图兼容
         SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
@@ -47,6 +48,7 @@ public class BaseApplication extends Application {
             }
         });
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -65,11 +67,12 @@ public class BaseApplication extends Application {
 
     /**
      * 利用单利模式获取Application实例
+     *
      * @return mApplicaiton
      */
-    public static BaseApplication getInstance(){
-        if (null==mApplication){
-            mApplication=new BaseApplication();
+    public static BaseApplication getInstance() {
+        if (null == mApplication) {
+            mApplication = new BaseApplication();
         }
         return mApplication;
     }

@@ -1,6 +1,7 @@
 <resources>
     <string name="NO_NET_CONNECTED">当前网络不可用，请检查网络情况</string>
     <string name="No_Login_Exception">登录失效，请重新登录</string>
+    <string name="NO_WEATHER_DATA">获取天气信息失败</string>
     <string name="app_name">菱云智航</string>
     <string name="error_phone">请输入正确的手机号码</string>
     <string name="empty_phone">请输入手机号码</string>

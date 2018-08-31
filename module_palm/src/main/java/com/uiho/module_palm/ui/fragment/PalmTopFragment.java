@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,11 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.Polygon;
+import com.amap.api.services.weather.LocalWeatherForecastResult;
+import com.amap.api.services.weather.LocalWeatherLive;
+import com.amap.api.services.weather.LocalWeatherLiveResult;
+import com.amap.api.services.weather.WeatherSearch;
+import com.amap.api.services.weather.WeatherSearchQuery;
 import com.uiho.module_palm.R;
 import com.uiho.module_palm.R2;
 import com.uiho.module_palm.contract.PalmTopContract;
@@ -42,6 +48,8 @@ import com.uiho.sgmw.common.mvp_senior.annotaions.CreatePresenterAnnotation;
 import com.uiho.sgmw.common.utils.AESUtil;
 import com.uiho.sgmw.common.utils.ARouterUtils;
 import com.uiho.sgmw.common.utils.DateUtils;
+import com.uiho.sgmw.common.utils.EventUtil;
+import com.uiho.sgmw.common.utils.GDLocationUtils;
 import com.uiho.sgmw.common.utils.IntentUtils;
 import com.uiho.sgmw.common.utils.SPUtils;
 import com.uiho.sgmw.common.utils.UserUtils;
@@ -72,7 +80,7 @@ import butterknife.OnClick;
 @CreatePresenterAnnotation(PalmTopPresenter.class)
 @Route(path = RouterPath.PALM_TOP_FRAGMENT) // 路由地址，必须注明
 public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmTopPresenter>
-        implements PalmTopContract.View {
+        implements PalmTopContract.View, WeatherSearch.OnWeatherSearchListener {
     @BindView(R2.id.txt_time)
     TextView txtTime;
     @BindView(R2.id.img_weather)
@@ -113,12 +121,20 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
     TextView txtFence;
     @BindView(R2.id.layout_elec_fence)
     LinearLayout layoutElecFence;
+    @BindView(R2.id.txt_temper)
+    TextView txtTemper;
+    @BindView(R2.id.txt_address)
+    TextView txtAddress;
     private String token;
     public String vin;
     private CarStatusModel status;
     private Polygon polygon;
     private boolean hideVin = true;
     private Marker marker;
+    private WeatherSearchQuery mquery;//天气查询
+    private WeatherSearch mweathersearch;
+    private String city;
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -127,6 +143,23 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
         setMapCustomStyleFile(mContext);
         aMap.setMapCustomEnable(true);//开启自定义
         GeoFenceClient mGeoFenceClient = new GeoFenceClient(mContext);
+        GDLocationUtils.getInstance().getLoacattion(new GDLocationUtils.OnLocationChangedListener() {
+            @Override
+            public void onSuccess(double latitude, double longitude, String addressstr) {
+                Log.i("single", addressstr);
+                mquery = new WeatherSearchQuery(addressstr, WeatherSearchQuery.WEATHER_TYPE_LIVE);
+                mweathersearch = new WeatherSearch(mContext);
+                mweathersearch.setOnWeatherSearchListener(PalmTopFragment.this);
+                mweathersearch.setQuery(mquery);
+                mweathersearch.searchWeatherAsyn();//异步搜索
+            }
+
+            @Override
+            public void onFail(int errCode, String errInfo) {
+
+            }
+        });
+
     }
 
     @Override
@@ -380,5 +413,26 @@ public class PalmTopFragment extends BaseMapFragment<PalmTopContract.View, PalmT
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight()); //设置边界
             txtVin.setCompoundDrawables(null, null, drawable, null);//画在右边
         }
+    }
+
+    @Override
+    public void onWeatherLiveSearched(LocalWeatherLiveResult weatherLiveResult, int rCode) {
+        if (rCode == 1000) {
+            if (weatherLiveResult != null && weatherLiveResult.getLiveResult() != null) {
+                LocalWeatherLive weatherlive = weatherLiveResult.getLiveResult();
+                txtAddress.setText(weatherlive.getCity());//城市
+//                weather.setText(weatherlive.getWeather());
+                txtTemper.setText(String.format("%s℃", weatherlive.getTemperature()));//温度
+            } else {
+                EventUtil.showToast(mContext, R.string.NO_WEATHER_DATA);
+            }
+        } else {
+            EventUtil.showToast(mContext, R.string.NO_WEATHER_DATA);
+        }
+    }
+
+    @Override
+    public void onWeatherForecastSearched(LocalWeatherForecastResult localWeatherForecastResult, int i) {
+
     }
 }

@@ -51,6 +51,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/txt_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawablePadding="@dimen/dp_4"
@@ -59,6 +60,7 @@
                             android:textColor="@color/color_white" />
 
                         <TextView
+                            android:id="@+id/txt_temper"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="20℃"
